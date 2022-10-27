@@ -1,8 +1,10 @@
-import { Container, Card, Row, Text } from '@nextui-org/react'
+import fs from 'fs/promises'
 import Head from 'next/head'
+import Image from 'next/image'
+import Link from 'next/link'
 import { Header } from '../components/Header.js'
 
-export default function Home() {
+export default function Home({comics}) {
   return (
     <div>
       <Head>
@@ -14,20 +16,31 @@ export default function Home() {
       <Header />
 
       <main>
-        <Container>
-          <Card css={{ $$cardColor: '$colors$primary' }}>
-            <Card.Body>
-              <Row justify="center" align="center">
-                <Text h6 size={15} color="white" css={{ m: 0 }}>
-                  NextUI gives you the best developer experience with all the features
-                  you need for building beautiful and modern websites and
-                  applications.
-                </Text>
-              </Row>
-            </Card.Body>
-          </Card>
-        </Container>
+        <h2>Latest Comics</h2>
+        {
+          comics.map(comic => (
+            <Link href={`/comic/${comic.id}`} key={comic.id}>
+              <img src={comic.img} alt={comic.alt} />
+            </Link>
+          ))
+        }
       </main>
     </div>
   )
+}
+
+export async function getStaticProps(context) {
+  const files = await fs.readdir('./comics')
+  const last6Files = files.slice(-6);
+  const promisesReadFiles = last6Files.map(async (file) => {
+    const content = await fs.readFile(`./comics/${file}`, 'utf-8')
+    return JSON.parse(content)
+  })
+
+  const latestComics = await Promise.all(promisesReadFiles)
+  return {
+    props: {
+      comics: latestComics
+    }, // will be passed to the page component as props
+  }
 }
