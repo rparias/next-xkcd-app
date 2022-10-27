@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Header } from '../components/Header.js'
+import { Grid } from "@nextui-org/react";
 
 export default function Home({comics}) {
   return (
@@ -17,13 +18,18 @@ export default function Home({comics}) {
 
       <main>
         <h2>Latest Comics</h2>
-        {
-          comics.map(comic => (
-            <Link href={`/comic/${comic.id}`} key={comic.id}>
-              <img src={comic.img} alt={comic.alt} />
-            </Link>
-          ))
-        }
+        <Grid.Container gap={2} justify="center">
+          {
+            comics.map(comic => (
+              <Grid xs={12} sm={6} md={4} key={comic.id} justify='center'>
+                <Link href={`/comic/${comic.id}`}>
+                  <h3 style={{textAlign: 'center'}}>{comic.title}</h3>
+                  <Image src={comic.img} alt={comic.alt} width={250} height={250} style={{objectFit: 'contain'}} />
+                </Link>
+              </Grid>
+            ))
+          }
+        </Grid.Container>
       </main>
     </div>
   )
