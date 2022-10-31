@@ -24,7 +24,7 @@ export default function Home({comics}) {
               <Grid xs={12} sm={6} md={4} key={comic.id} justify='center'>
                 <Link href={`/comic/${comic.id}`}>
                   <h3 style={{textAlign: 'center'}}>{comic.title}</h3>
-                  <Image src={comic.img} alt={comic.alt} width={250} height={250} style={{objectFit: 'contain'}} />
+                  <Image src={comic.img} alt={comic.alt} width={comic.width} height={comic.height} style={{objectFit: 'contain'}} />
                 </Link>
               </Grid>
             ))
